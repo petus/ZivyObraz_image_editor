@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor obrázků pro zivyobraz.eu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      height: 100vh;
+      margin: 0;
+      background: #222;
+      color: #fff;
+      padding: 2em;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      margin-right: 2em;
+    }
+    .controls label, .controls button {
+      width: 100%;
+      margin-top: 1em;
+    }
+    input[type="range"], input[type="number"], button, select {
+      width: 100%;
+    }
+    canvas {
+      border: 1px solid #555;
+      background: black;
+      margin-top: 1em;
+      display: block;
+    }
+    .preview-container {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    button {
+      background-color: #333;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #555;
+    }
+    .icon {
+      margin-right: 8px;
+    }
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slider-label span {
+      margin-left: 10px;
+      min-width: 40px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h1>Editor obrázků pro <a hred="https://zivyobraz.eu/">ZivyObraz.eu</a></h1>
+
+    <input type="file" accept="image/*" id="upload"><br>
+    <button onclick="downloadImage()"><i class="fas fa-download icon"></i>Stáhnout upravený obrázek</button>
+
+    <div id="resolution-controls">
+      <label>Výstupní šířka: <input type="number" id="outputWidth" value="800" min="1"></label>
+      <label>Výstupní výška: <input type="number" id="outputHeight" value="480" min="1"></label>
+      <button onclick="resizeCanvas()"><i class="fas fa-cogs icon"></i>Upravit rozlišení</button>
+    </div>
+
+    <div id="sliders" style="display:none;">
+      <div class="slider-label">
+        <label for="brightness">Jas:</label>
+        <span id="brightnessValue">1.0</span>
+      </div>
+      <input type="range" min="0" max="3" step="0.1" value="1" id="brightness">
+      
+      <div class="slider-label">
+        <label for="contrast">Kontrast:</label>
+        <span id="contrastValue">1.0</span>
+      </div>
+      <input type="range" min="0" max="5" step="0.1" value="1" id="contrast">
+
+      <div class="slider-label">
+        <label for="saturation">Saturace:</label>
+        <span id="saturationValue">1.0</span>
+      </div>
+      <input type="range" min="0" max="5" step="0.1" value="1" id="saturation">
+    </div>
+    
+    <div id="crop-controls">
+      <label>
+        <input type="checkbox" id="cropImage">
+        Oříznout podle poměru výstupního rozlišení
+      </label>
+    </div>
+    
+    <div id="rotation-controls">
+      <label>Úhel rotace (0–360°): <input type="number" id="rotationAngle" value="0" min="0" max="360" step="1"></label>
+      <button onclick="applyRotation()"><i class="fas fa-sync-alt icon"></i>Aplikovat rotaci a oříznutí</button>
+    </div>
+
+    <div id="border-controls">
+      <label>Barva okraje:</label>
+      <select id="borderColor">
+        <option value="black">Černá</option>
+        <option value="white">Bílá</option>
+      </select>
+      <button onclick="applyBorder()"><i class="fas fa-border-all icon"></i>Přidat okraj</button>
+    </div>
+  </div>
+
+  <div class="preview-container">
+    <canvas id="canvas" width="800" height="480"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let originalImage = null;
+    let originalFilename = "upraveny_obrazek";
+    let outputWidth = 800;
+    let outputHei
