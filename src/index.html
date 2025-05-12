@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="cs">
-
 <head>
   <meta charset="UTF-8">
   <title>Editor obrázků pro zivyobraz.eu</title>
@@ -17,34 +16,25 @@
       color: #fff;
       padding: 2em;
     }
-
     .controls {
       display: flex;
       flex-direction: column;
       width: 300px;
       margin-right: 2em;
     }
-
-    .controls label,
-    .controls button {
+    .controls label, .controls button {
       width: 100%;
       margin-top: 1em;
     }
-
-    input[type="range"],
-    input[type="number"],
-    button,
-    select {
+    input[type="range"], input[type="number"], button, select {
       width: 100%;
     }
-
     canvas {
       border: 1px solid #555;
       background: black;
       margin-top: 1em;
       display: block;
     }
-
     .preview-container {
       flex-grow: 1;
       display: flex;
@@ -52,7 +42,6 @@
       justify-content: flex-start;
       align-items: center;
     }
-
     button {
       background-color: #333;
       border: 1px solid #444;
@@ -61,34 +50,28 @@
       font-size: 16px;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #555;
     }
-
     .icon {
       margin-right: 8px;
     }
-
     .slider-label {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .slider-label span {
       margin-left: 10px;
       min-width: 40px;
       text-align: right;
     }
-
     #epd-sim-controls {
       margin-top: 1em;
       margin-bottom: 1em;
     }
   </style>
 </head>
-
 <body>
   <div class="controls">
     <h1>Editor obrázků pro <a hred="https://zivyobraz.eu/">ZivyObraz.eu</a></h1>
