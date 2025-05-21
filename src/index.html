@@ -211,10 +211,16 @@
     function resizeCanvas() {
       outputWidth = parseInt(document.getElementById('outputWidth').value);
       outputHeight = parseInt(document.getElementById('outputHeight').value);
-      (canvas, epdCanvas, epdSimCanvas).forEach(c => {
-        c.width = outputWidth;
-        c.height = outputHeight;
-      });
+
+      canvas.width = outputWidth;
+      canvas.height = outputHeight;
+
+      epdCanvas.width = outputWidth;
+      epdCanvas.height = outputHeight;
+
+      epdSimCanvas.width = outputWidth;
+      epdSimCanvas.height = outputHeight;
+
       drawImageWithAdjustments();
     }
 
